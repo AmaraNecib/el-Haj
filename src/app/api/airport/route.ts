@@ -13,7 +13,7 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
             name,
             city,
             country,
-            gates
+            gates: parseInt(gates)
         }
     });
     return NextResponse.json({airport}, {status: 201});
