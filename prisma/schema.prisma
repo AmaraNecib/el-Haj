@@ -35,6 +35,8 @@ model Flight{
   date      DateTime
   price     Float
   timeOfFlight Int
+  startTime DateTime
+  endTime   DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   bookings  Booking[]
@@ -57,8 +59,6 @@ model Booking{
   userId    Int
   flight    Flight   @relation(fields: [flightId], references: [id])
   flightId  Int
-  startTime DateTime
-  endTime   DateTime
   statusId  Int
   status    BookingStatus @relation(fields: [statusId], references: [id])
   createdAt DateTime @default(now())
