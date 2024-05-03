@@ -8,15 +8,20 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
 export const POST = async (req: NextRequest, res: NextResponse) => {
     // @ts-ignore
     const { name, city, country, gates } = req.json();
-    const airport = await prisma.airport.create({
-        data: {
-            name,
-            city,
-            country,
-            gates: parseInt(gates)
-        }
-    });
-    return NextResponse.json({airport}, {status: 201});
+    if(!name || !city || !country || !gates) return NextResponse.json({error: "Missing fields"}, {status: 400});
+    try{
+        const airport = await prisma.airport.create({
+            data: {
+                name,
+                city,
+                country,
+                gates: parseInt(gates)
+            }
+        });
+        return NextResponse.json({airport}, {status: 201});
+    }catch(error){
+        return NextResponse.json({error: "Error here"},{status: 500});
+    }
 }
 
 
