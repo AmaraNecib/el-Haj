@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
+import { parse } from "path";
 
 export const GET = async (req: NextRequest, res: NextResponse) => {
     try{
@@ -12,20 +13,26 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
 }
 export const POST = async (req: NextRequest, res: NextResponse) => {
     // @ts-ignore
-    try{ const { from, to, date, price,timeOfFlight,airportId,startTime,endTime } = req.json();
+    try{ 
+    let { to,price,timeOfFlight,airportId,startTime,endTime } = await req.json();
+    let airport = await prisma.airport.findUnique({where: {id: airportId}});
+    if(!airport) return NextResponse.json({message: "Airport not found"}, {status: 404});
+    timeOfFlight = parseInt(timeOfFlight);
+    price = parseInt(price);
+    startTime = new Date(startTime);
+    endTime = new Date(endTime);
     const flight = await prisma.flight.create({
         // @ts-ignore
         data: {
-            from,
+            from: airport.city,
             to,
-            date,
             price,
             timeOfFlight,
             endTime,
             startTime,
             airport: {
                 connect: {
-                    id: airportId
+                    id: parseInt(airportId)
                 }
             }
         }

@@ -32,7 +32,6 @@ model Flight{
   airportId Int
   from      String
   to        String
-  date      DateTime
   price     Float
   timeOfFlight Int
   startTime DateTime
