@@ -7,7 +7,7 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
 }
 export const POST = async (req: NextRequest, res: NextResponse) => {
     // @ts-ignore
-    const { name, city, country, gates } = req.json();
+    const { name, city, country, gates } = await req.json();
     return NextResponse.json({name, city, country, gates}, {status: 100});
     if(!name || !city || !country || !gates) return NextResponse.json({error: "Missing fields"}, {status: 400});
     try{
