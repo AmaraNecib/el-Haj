@@ -5,10 +5,10 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
     const airports = await prisma.airport.findMany({});
     return NextResponse.json(airports);
 }
-export const POST = async (req: NextRequest, res: NextResponse) => {
+
+export const POST = async (req: NextRequest) => {
     // @ts-ignore
     const { name, city, country, gates } = await req.json();
-    return NextResponse.json({name, city, country, gates}, {status: 100});
     if(!name || !city || !country || !gates) return NextResponse.json({error: "Missing fields"}, {status: 400});
     try{
         const airport = await prisma.airport.create({
@@ -23,14 +23,4 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
     }catch(error){
         return NextResponse.json({error: "Error here"},{status: 500});
     }
-}
-
-
-type airport = {
-    name: string;
-    city: string;
-    country: string;
-    gates: number;
-    createdAt: Date;
-    updatedAt: Date;
 }
