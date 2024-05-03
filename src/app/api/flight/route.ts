@@ -21,24 +21,24 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
     price = parseInt(price);
     startTime = new Date(startTime);
     endTime = new Date(endTime);
-    return NextResponse.json({to,price,timeOfFlight,airportId,startTime,endTime},{status: 500});
-    // const flight = await prisma.flight.create({
-    //     // @ts-ignore
-    //     data: {
-    //         from: airport.city,
-    //         to,
-    //         price,
-    //         timeOfFlight,
-    //         endTime,
-    //         startTime,
-    //         airport: {
-    //             connect: {
-    //                 id: parseInt(airportId)
-    //             }
-    //         }
-    //     }
-    // });
-    // return NextResponse.json({flight}, {status: 201});
+    // return NextResponse.json({to,price,timeOfFlight,airportId,startTime,endTime},{status: 500});
+    const flight = await prisma.flight.create({
+        // @ts-ignore
+        data: {
+            from: airport.city,
+            to,
+            price,
+            timeOfFlight,
+            endTime,
+            startTime,
+            airport: {
+                connect: {
+                    id: parseInt(airportId)
+                }
+            }
+        }
+    });
+    return NextResponse.json({flight}, {status: 201});
 }
     catch(error){
         return NextResponse.json({message: "Error"},{status: 500});
