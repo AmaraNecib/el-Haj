@@ -13,34 +13,30 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
 }
 export const POST = async (req: NextRequest, res: NextResponse) => {
     // @ts-ignore
-    try{ 
-    let { to,price,timeOfFlight,airportId,startTime,endTime } = await req.json();
+    // try{ 
+    const  { to,price,timeOfFlight,airportId,startTime,endTime } = await req.json();
+
     const airport = await prisma.airport.findUnique({where: {id: airportId}});
     if(!airport) return NextResponse.json({message: "Airport not found"}, {status: 404});
-    timeOfFlight = parseInt(timeOfFlight);
-    price = parseInt(price);
-    startTime = new Date(startTime);
-    endTime = new Date(endTime);
-    return NextResponse.json({to : typeof(to), price: typeof(price),timeOfFlight: typeof(timeOfFlight),airportId: typeof(airportId),startTime: typeof(startTime),endTime: typeof(endTime)},{status: 500});
-    // const flight = await prisma.flight.create({
-    //     // @ts-ignore
-    //     data: {
-    //         from: airport.city,
-    //         to,
-    //         price,
-    //         timeOfFlight,
-    //         endTime,
-    //         startTime,
-    //         airport: {
-    //             connect: {
-    //                 id: parseInt(airportId)
-    //             }
-    //         }
-    //     }
-    // });
-    // return NextResponse.json({flight}, {status: 201});
-}
-    catch(error){
-        return NextResponse.json({message: "Error"},{status: 500});
-    }
+    const flight = await prisma.flight.create({
+        // @ts-ignore
+        data: {
+            from: airport.city,
+            to,
+            price : parseInt(price),
+            timeOfFlight: parseInt(timeOfFlight),
+            endTime: new Date(endTime).toISOString(),
+            startTime: new Date(startTime).toISOString(),
+            airport: {
+                connect: {
+                    id: parseInt(airportId)
+                }
+            }
+        }
+    });
+    return NextResponse.json({flight}, {status: 201});
+// }
+//     catch(error){
+//         return NextResponse.json({message: "Error"},{status: 500});
+//     }
 }
